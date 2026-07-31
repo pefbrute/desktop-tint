@@ -4,6 +4,25 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 
 ---
 
+## 📊 Interactive Subproblem Symptoms & Fix Matrix
+
+| ID | Symptom | Empirical Log Evidence | Code Fix Location | Diagnostic Test |
+|---|---|---|---|---|
+| **SUBPROBLEM-01** | Click lost during preview popup hover | 7 consecutive `showWindowPreviews` calls in 1s | `extension.js:460` | `diagnose_live_clicks_0219.py` |
+| **SUBPROBLEM-02** | Icon order corrupted during sync | `Repositioning icon from index 15 to 13` | `extension.js:1840` | `dock_health_auditor.py` |
+| **SUBPROBLEM-03** | Favorites array wiped on GSettings update | `_syncApps()` running at GSettings change | `extension.js:1805` | `dock_health_auditor.py` |
+| **SUBPROBLEM-04** | Custom app IDs (`antigravity.desktop`) missing | `lookup_app(id)` returning `null` | `extension.js:1780` | `diagnose_favorites_visibility_live.py` |
+| **SUBPROBLEM-05** | Click ignored during icon movement/DND | 10 consecutive `_syncApps()` during hover | `extension.js:1810` | `diagnose_live_clicks_0219.py` |
+| **SUBPROBLEM-06** | `_appGridBtn` missing from `_appsBox` | `_appsBox` children count mismatch | `extension.js:1835` | `dock_health_auditor.py` |
+| **SUBPROBLEM-07** | `get_child_at_index()` error on `St.BoxLayout` | GJS method evaluation failure | `extension.js:1850` | `dock_health_auditor.py` |
+| **SUBPROBLEM-08** | Pango markup crash on title truncation | `Entity did not end with a semicolon` | `extension.js:500` | `dock_health_auditor.py` |
+| **SUBPROBLEM-09** | Disposed C object reference leak | `Object St.Widget has been already disposed` | `extension.js:1440` | `dock_health_auditor.py` |
+| **SUBPROBLEM-11** | Autohide not activating on mouse edge hover | Dock failing to trigger `_showDock()` | `extension.js:1325` | `dock_health_auditor.py` |
+| **SUBPROBLEM-13** | Window not raising/focusing on click | `activateOrMinimize` running but window unfocused | `extension.js:365` | `diagnose_live_clicks_0219.py` |
+| **SUBPROBLEM-15** | Favorite icons disappearing when tray loads | `Stole 13 indicator icons from top panel` | `extension.js:825` | `run_all_tests.sh` |
+
+---
+
 ## 📌 Subproblem Index
 
 ### 1. SUBPROBLEM-01: Preview Popup Hover Storm Interception (Group C2 Click Loss)
