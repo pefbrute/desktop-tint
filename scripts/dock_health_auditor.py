@@ -67,12 +67,32 @@ def run_health_audit():
     else:
         print(f"  - STATUS: WARNING ⚠️ (Disparity or Focus Stealing detected!)")
 
+    is_passed = (audit_results['pango_errors'] == 0 and audit_results['sync_errors'] == 0 and len(focus_stealing_warnings) == 0)
+    audit_results['status'] = "PASSED" if is_passed else "FAILED"
+    audit_results['click_pairing'] = (press_count == release_count)
+    audit_results['focus_stealing_errors'] = len(focus_stealing_warnings)
+
     print("\n==========================================================")
-    if audit_results['pango_errors'] == 0 and audit_results['sync_errors'] == 0 and len(focus_stealing_warnings) == 0:
+    if is_passed:
         print("    OVERALL DOCK HEALTH STATUS: PASSED ALL CHECKS ✅   ")
     else:
         print("    OVERALL DOCK HEALTH STATUS: ISSUES DETECTED ❌      ")
     print("==========================================================")
+
+    # Save machine-readable JSON for AI agents
+    import json
+    import os
+    json_paths = [
+        "/home/fedor/projects/Pasynkov Tint/scratch/agent_last_audit.json",
+        "/home/fedor/.gemini/antigravity/brain/cb829770-8b9a-4ddf-b1d4-40a1c1286419/scratch/agent_last_audit.json"
+    ]
+    for p in json_paths:
+        try:
+            os.makedirs(os.path.dirname(p), exist_ok=True)
+            with open(p, "w", encoding="utf-8") as f:
+                json.dump(audit_results, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"Warning writing JSON to {p}: {e}")
 
 if __name__ == "__main__":
     run_health_audit()
