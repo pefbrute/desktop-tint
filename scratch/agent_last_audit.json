@@ -2,10 +2,10 @@
   "gsettings_fav_count": 11,
   "pango_errors": 0,
   "sync_errors": 0,
-  "press_count": 2,
-  "release_count": 3,
-  "clicked_count": 2,
+  "press_count": 0,
+  "release_count": 0,
+  "clicked_count": 0,
   "status": "PASSED",
-  "click_pairing": false,
+  "click_pairing": true,
   "focus_stealing_errors": 0
 }

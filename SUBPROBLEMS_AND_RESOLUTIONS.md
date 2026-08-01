@@ -20,6 +20,7 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 | **SUBPROBLEM-11** | Autohide not activating on mouse edge hover | Dock failing to trigger `_showDock()` | `extension.js:1325` | `dock_health_auditor.py` |
 | **SUBPROBLEM-13** | Window not raising/focusing on click | `activateOrMinimize` running but window unfocused | `extension.js:365` | `diagnose_live_clicks_0219.py` |
 | **SUBPROBLEM-15** | Favorite icons disappearing when tray loads | `Stole 13 indicator icons from top panel` | `extension.js:825` | `run_all_tests.sh` |
+| **SUBPROBLEM-16** | Icons cut off after running hours (16 items) | `_dockContainer` container overflow on scale down | `extension.js:1410` | `run_all_tests.sh` |
 
 ---
 
@@ -137,3 +138,12 @@ if (this._appsSeparator) {
 - **Resolution:**
   - Re-ordered `_dockContainer` child hierarchy so `_appsBox` is positioned FIRST at the very top of the dock, giving favorite icons top priority.
   - Removed `Main.panel.set_height(0)` to preserve GNOME Shell top bar layout stability.
+
+---
+
+### 16. SUBPROBLEM-16: Stale Icon Texture Dimensions During Responsive Height Scaling
+- **Log Evidence:** Favorites initially visible, but disappearing after several hours of uptime when multiple windows are opened (`total=16` items in `_appsBox`).
+- **Mechanism:** As new windows/apps opened over time, `_updatePositions()` calculated a smaller responsive icon size `calcSize` (e.g. 32px instead of 48px), BUT existing `DockAppIcon` instances in `_appsBox` retained their old 48px texture sizes because `DockAppIcon` lacked a dynamic texture resizing method. `_appsBox` required 960px vertical height while `_dockContainer` set its height to 768px, causing Clutter to clip `_appsBox` icons out of view.
+- **Resolution:**
+  - Implemented `setIconSize(newSize)` method on `DockAppIcon` to dynamically recreate icon textures.
+  - Updated `_updatePositions()` to iterate over `_appIconMap` calling `item.setIconSize(calcSize)` whenever responsive scale changes.
