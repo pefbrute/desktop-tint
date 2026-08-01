@@ -24,6 +24,7 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 | **SUBPROBLEM-17** | Favorite icons destroyed by `setIconSize()` | Screenshot showing top grid button + tray only | `extension.js:130` | `run_all_tests.sh` |
 | **SUBPROBLEM-18** | Stolen tray height (364px) pushing favorites off | 13 stolen tray icons causing 324px overflow | `extension.js:1390` | `run_all_tests.sh` |
 | **SUBPROBLEM-19** | Unmapped GObject disposal & layout clipping | Disposed St.Button error & unmapped favorites | `extension.js:885,1916` | `run_all_tests.sh` |
+| **SUBPROBLEM-20** | `max_height` property crash on `StScrollView` | `No property max_height on StScrollView` error | `extension.js:913` | `inspect_journalctl.py` |
 
 ---
 
@@ -144,10 +145,7 @@ if (this._appsSeparator) {
 
 ---
 
-### 19. SUBPROBLEM-19: Unmapped GObject Disposal & Layout Overflow in Extension Panel
-- **Log Evidence:** Log `Object St.Button has been already disposed — impossible to get any property from it` coming from `popupMenu.js:832` via `this.menu.destroy()`.
-- **Mechanism:** Calling `this.menu.destroy()` in `DockAppIcon`'s destroy signal handler attempted to destroy a `PopupMenu` actor that was already disposed by C code or managed by `Shell.AppSystem`. This threw a fatal GJS exception during `_syncApps()` layout rebuilding, causing `_syncApps()` to abort mid-execution and leaving favorites unmapped/unrendered.
-- **Resolution:**
-  - Replaced `this.menu.destroy()` with safe `this.menu.close(false)`.
-  - Wrapped `_appsBox` inside an `St.ScrollView` (`_appsScroll`) so favorite icons can scroll without layout clipping.
-  - Added `Gio.DesktopAppInfo` fallback resolution in `_resolveFavorite(id)` so custom `.desktop` files always resolve.
+### 20. SUBPROBLEM-20: `No property max_height on StScrollView` GObject Constructor Failure on Session Startup
+- **Log Evidence:** Log `JS ERROR: Extension right-dock@pasynkov: Error: No property max_height on StScrollView` in `extensionSystem.js:183`.
+- **Mechanism:** Passing `max_height: 140` in `new St.ScrollView({ max_height: 140 })` constructor threw a fatal GJS GObject property construction error on GNOME Shell startup (`Error: No property max_height on StScrollView`), causing GNOME Shell's `extensionSystem.js` to disable the extension during startup.
+- **Resolution:** Replaced `max_height: 140` property in constructor with `style: 'max-height: 140px;'`. Re-enabled extension via `gnome-extensions enable right-dock@pasynkov`.
