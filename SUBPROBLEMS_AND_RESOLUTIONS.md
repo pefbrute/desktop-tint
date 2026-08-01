@@ -23,6 +23,7 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 | **SUBPROBLEM-16** | Icons cut off after running hours (16 items) | `_dockContainer` container overflow on scale down | `extension.js:1410` | `run_all_tests.sh` |
 | **SUBPROBLEM-17** | Favorite icons destroyed by `setIconSize()` | Screenshot showing top grid button + tray only | `extension.js:130` | `run_all_tests.sh` |
 | **SUBPROBLEM-18** | Stolen tray height (364px) pushing favorites off | 13 stolen tray icons causing 324px overflow | `extension.js:1390` | `run_all_tests.sh` |
+| **SUBPROBLEM-19** | Unmapped GObject disposal & layout clipping | Disposed St.Button error & unmapped favorites | `extension.js:885,1916` | `run_all_tests.sh` |
 
 ---
 
@@ -143,7 +144,10 @@ if (this._appsSeparator) {
 
 ---
 
-### 18. SUBPROBLEM-18: Unaccounted 364px Vertical Height from Stolen Tray Icons in Responsive Layout Engine
-- **Log Evidence:** Log `Stole 13 indicator icons from top panel` with 13 tray icons taking 364px vertical height, pushing all 11 favorite icons below `_appGridBtn` completely out of view.
-- **Mechanism:** When 13 tray icons were stolen into `_trayBox`, `_trayBox` height expanded to 364px. `_updatePositions()` previously assumed a static 40px height for `_trayBox`, calculating a large 48px icon size (`calcSize = 48px`). The 324px calculation error caused total container height to exceed monitor height (1222px > 1056px), forcing Clutter to clip `_appsBox` and push all 11 favorite icons below `_appGridBtn` out of view.
-- **Resolution:** Dynamically measure actual `_trayBox.get_preferred_height()` in `_updatePositions()` to guarantee exact responsive icon scaling down to fit all favorite icons regardless of how many tray icons exist.
+### 19. SUBPROBLEM-19: Unmapped GObject Disposal & Layout Overflow in Extension Panel
+- **Log Evidence:** Log `Object St.Button has been already disposed — impossible to get any property from it` coming from `popupMenu.js:832` via `this.menu.destroy()`.
+- **Mechanism:** Calling `this.menu.destroy()` in `DockAppIcon`'s destroy signal handler attempted to destroy a `PopupMenu` actor that was already disposed by C code or managed by `Shell.AppSystem`. This threw a fatal GJS exception during `_syncApps()` layout rebuilding, causing `_syncApps()` to abort mid-execution and leaving favorites unmapped/unrendered.
+- **Resolution:**
+  - Replaced `this.menu.destroy()` with safe `this.menu.close(false)`.
+  - Wrapped `_appsBox` inside an `St.ScrollView` (`_appsScroll`) so favorite icons can scroll without layout clipping.
+  - Added `Gio.DesktopAppInfo` fallback resolution in `_resolveFavorite(id)` so custom `.desktop` files always resolve.
