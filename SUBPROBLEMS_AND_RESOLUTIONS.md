@@ -25,6 +25,7 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 | **SUBPROBLEM-18** | Stolen tray height (364px) pushing favorites off | 13 stolen tray icons causing 324px overflow | `extension.js:1390` | `run_all_tests.sh` |
 | **SUBPROBLEM-19** | Unmapped GObject disposal & layout clipping | Disposed St.Button error & unmapped favorites | `extension.js:885,1916` | `run_all_tests.sh` |
 | **SUBPROBLEM-20** | `max_height` property crash on `StScrollView` | `No property max_height on StScrollView` error | `extension.js:913` | `inspect_journalctl.py` |
+| **SUBPROBLEM-21** | Typo in `updateRunningDots` method call | `this.updateRunningDots is not a function` | `extension.js:129` | `reload_x11_gnome_shell.py` |
 
 ---
 
@@ -145,7 +146,9 @@ if (this._appsSeparator) {
 
 ---
 
-### 20. SUBPROBLEM-20: `No property max_height on StScrollView` GObject Constructor Failure on Session Startup
-- **Log Evidence:** Log `JS ERROR: Extension right-dock@pasynkov: Error: No property max_height on StScrollView` in `extensionSystem.js:183`.
-- **Mechanism:** Passing `max_height: 140` in `new St.ScrollView({ max_height: 140 })` constructor threw a fatal GJS GObject property construction error on GNOME Shell startup (`Error: No property max_height on StScrollView`), causing GNOME Shell's `extensionSystem.js` to disable the extension during startup.
-- **Resolution:** Replaced `max_height: 140` property in constructor with `style: 'max-height: 140px;'`. Re-enabled extension via `gnome-extensions enable right-dock@pasynkov`.
+### 21. SUBPROBLEM-21: Typo in `DockAppIcon._init()` (`updateRunningDots` vs `updateDot`) & In-Place X11 Session Reload
+- **Log Evidence:** Log `[RightDock ERROR] Error creating DockAppIcon: this.updateRunningDots is not a function` in `extension.js:129`.
+- **Mechanism:** A method name mismatch (`updateRunningDots` vs `updateDot`) inside `DockAppIcon._init()` caused GJS to throw an unhandled `TypeError` whenever constructing any icon button, causing `_syncApps()` to create 0 app icon widgets.
+- **Resolution:**
+  - Fixed typo to `this.updateDot()` in `extension.js:129`.
+  - Created **[`scripts/reload_x11_gnome_shell.py`](file:///home/fedor/projects/Pasynkov%20Tint/scripts/reload_x11_gnome_shell.py)** to execute in-place X11 session reloading via `killall -HUP gnome-shell`.
