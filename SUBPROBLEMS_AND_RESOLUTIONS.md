@@ -27,6 +27,7 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 | **SUBPROBLEM-20** | `max_height` property crash on `StScrollView` | `No property max_height on StScrollView` error | `extension.js:913` | `inspect_journalctl.py` |
 | **SUBPROBLEM-21** | Typo in `updateRunningDots` method call | `this.updateRunningDots is not a function` | `extension.js:129` | `reload_x11_gnome_shell.py` |
 | **SUBPROBLEM-22** | Status icon size pollution (48px) & GNOME 42 API | Wi-Fi/volume icons giant (48px) | `extension.js:1330` | `run_all_tests.sh` |
+| **SUBPROBLEM-23** | Reorder container layout: Tray above Apps | User request: place Tray icons above Favorites | `extension.js:885` | `run_all_tests.sh` |
 
 ---
 
@@ -147,10 +148,11 @@ if (this._appsSeparator) {
 
 ---
 
-### 22. SUBPROBLEM-22: Status Icon Size Pollution (48px) & GNOME 42 API Alignment
-- **Log Evidence:** User report: *"на панельке иконки типа вай-фая, яркости и подобных просто пока стали больше, избранные не отображает"*.
-- **Mechanism:** `_makeQuickButton` was passing `this._iconSize` (48px) to status icons instead of maintaining an isolated fixed 16px size. Additionally, code attempted to reference `quickSettings` (a GNOME 43+ API feature not present in GNOME 42 Ubuntu 22.04).
-- **Resolution:**
-  - Added isolated CSS classes `.pasynkov-dock-app-icon` (48px) and `.pasynkov-dock-status-icon` (16px).
-  - Fixed `_makeQuickButton` to pass `icon_size: 16`.
-  - Removed GNOME 43 `quickSettings` references, using `Main.panel.statusArea.aggregateMenu` for GNOME 42.
+### 23. SUBPROBLEM-23: Reordering Dock Container Sections (Tray Icons Above Favorite Apps)
+- **Log Evidence:** User request: *"можешь их оформить под иконками с треем?"* (Place favorite apps below tray icons).
+- **Mechanism:** Previously `_appsScroll` was added first inside `_dockContainer` at the top, placing tray icons below favorites.
+- **Resolution:** Reordered child addition inside `_dockContainer` in `enable()`:
+  1. `_trayScroll` (`TrayBox`, max height 140px, 16px icons)
+  2. `_separatorTray` (Thin separator line)
+  3. `_appsScroll` (`AppsViewport`, 48px icons, `y_expand: true`)
+  4. `_statusBox` (`StatusBox`, clock + 16px quick buttons at bottom).
