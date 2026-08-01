@@ -26,6 +26,7 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 | **SUBPROBLEM-19** | Unmapped GObject disposal & layout clipping | Disposed St.Button error & unmapped favorites | `extension.js:885,1916` | `run_all_tests.sh` |
 | **SUBPROBLEM-20** | `max_height` property crash on `StScrollView` | `No property max_height on StScrollView` error | `extension.js:913` | `inspect_journalctl.py` |
 | **SUBPROBLEM-21** | Typo in `updateRunningDots` method call | `this.updateRunningDots is not a function` | `extension.js:129` | `reload_x11_gnome_shell.py` |
+| **SUBPROBLEM-22** | Status icon size pollution (48px) & GNOME 42 API | Wi-Fi/volume icons giant (48px) | `extension.js:1330` | `run_all_tests.sh` |
 
 ---
 
@@ -146,9 +147,10 @@ if (this._appsSeparator) {
 
 ---
 
-### 21. SUBPROBLEM-21: Typo in `DockAppIcon._init()` (`updateRunningDots` vs `updateDot`) & In-Place X11 Session Reload
-- **Log Evidence:** Log `[RightDock ERROR] Error creating DockAppIcon: this.updateRunningDots is not a function` in `extension.js:129`.
-- **Mechanism:** A method name mismatch (`updateRunningDots` vs `updateDot`) inside `DockAppIcon._init()` caused GJS to throw an unhandled `TypeError` whenever constructing any icon button, causing `_syncApps()` to create 0 app icon widgets.
+### 22. SUBPROBLEM-22: Status Icon Size Pollution (48px) & GNOME 42 API Alignment
+- **Log Evidence:** User report: *"на панельке иконки типа вай-фая, яркости и подобных просто пока стали больше, избранные не отображает"*.
+- **Mechanism:** `_makeQuickButton` was passing `this._iconSize` (48px) to status icons instead of maintaining an isolated fixed 16px size. Additionally, code attempted to reference `quickSettings` (a GNOME 43+ API feature not present in GNOME 42 Ubuntu 22.04).
 - **Resolution:**
-  - Fixed typo to `this.updateDot()` in `extension.js:129`.
-  - Created **[`scripts/reload_x11_gnome_shell.py`](file:///home/fedor/projects/Pasynkov%20Tint/scripts/reload_x11_gnome_shell.py)** to execute in-place X11 session reloading via `killall -HUP gnome-shell`.
+  - Added isolated CSS classes `.pasynkov-dock-app-icon` (48px) and `.pasynkov-dock-status-icon` (16px).
+  - Fixed `_makeQuickButton` to pass `icon_size: 16`.
+  - Removed GNOME 43 `quickSettings` references, using `Main.panel.statusArea.aggregateMenu` for GNOME 42.
