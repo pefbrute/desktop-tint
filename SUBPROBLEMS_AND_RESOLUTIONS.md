@@ -21,6 +21,7 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 | **SUBPROBLEM-13** | Window not raising/focusing on click | `activateOrMinimize` running but window unfocused | `extension.js:365` | `diagnose_live_clicks_0219.py` |
 | **SUBPROBLEM-15** | Favorite icons disappearing when tray loads | `Stole 13 indicator icons from top panel` | `extension.js:825` | `run_all_tests.sh` |
 | **SUBPROBLEM-16** | Icons cut off after running hours (16 items) | `_dockContainer` container overflow on scale down | `extension.js:1410` | `run_all_tests.sh` |
+| **SUBPROBLEM-17** | Favorite icons destroyed by `setIconSize()` | Screenshot showing top grid button + tray only | `extension.js:130` | `run_all_tests.sh` |
 
 ---
 
@@ -141,9 +142,7 @@ if (this._appsSeparator) {
 
 ---
 
-### 16. SUBPROBLEM-16: Stale Icon Texture Dimensions During Responsive Height Scaling
-- **Log Evidence:** Favorites initially visible, but disappearing after several hours of uptime when multiple windows are opened (`total=16` items in `_appsBox`).
-- **Mechanism:** As new windows/apps opened over time, `_updatePositions()` calculated a smaller responsive icon size `calcSize` (e.g. 32px instead of 48px), BUT existing `DockAppIcon` instances in `_appsBox` retained their old 48px texture sizes because `DockAppIcon` lacked a dynamic texture resizing method. `_appsBox` required 960px vertical height while `_dockContainer` set its height to 768px, causing Clutter to clip `_appsBox` icons out of view.
-- **Resolution:**
-  - Implemented `setIconSize(newSize)` method on `DockAppIcon` to dynamically recreate icon textures.
-  - Updated `_updatePositions()` to iterate over `_appIconMap` calling `item.setIconSize(calcSize)` whenever responsive scale changes.
+### 17. SUBPROBLEM-17: Favorite Icon Textures Destroyed by `setIconSize()` Recreation Attempt
+- **Log Evidence:** Screenshot showing top button `_appGridBtn` + stolen tray icons, with 11 favorite icons completely missing from view below it.
+- **Mechanism:** `setIconSize(newSize)` called `this.icon.destroy()` and attempted to recreate textures via `this.app.create_icon_texture(size)`. In GNOME Shell GJS, `create_icon_texture()` returns `null` when invoked after initial startup for user-installed custom `.desktop` entries (like `antigravity.desktop`, `hiddify-root.desktop`, `antigravity-ide.desktop`). This destroyed the inner `this.icon` actor on every favorite button without replacing it, leaving all 11 favorite icons invisible with 0 height.
+- **Resolution:** Replaced `this.icon.destroy()` and `create_icon_texture()` in `setIconSize(size)` with direct, safe actor size scaling (`this.icon.set_size(size, size)` and `this.icon.icon_size = size`).
