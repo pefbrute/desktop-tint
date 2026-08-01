@@ -22,6 +22,7 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 | **SUBPROBLEM-15** | Favorite icons disappearing when tray loads | `Stole 13 indicator icons from top panel` | `extension.js:825` | `run_all_tests.sh` |
 | **SUBPROBLEM-16** | Icons cut off after running hours (16 items) | `_dockContainer` container overflow on scale down | `extension.js:1410` | `run_all_tests.sh` |
 | **SUBPROBLEM-17** | Favorite icons destroyed by `setIconSize()` | Screenshot showing top grid button + tray only | `extension.js:130` | `run_all_tests.sh` |
+| **SUBPROBLEM-18** | Stolen tray height (364px) pushing favorites off | 13 stolen tray icons causing 324px overflow | `extension.js:1390` | `run_all_tests.sh` |
 
 ---
 
@@ -142,7 +143,7 @@ if (this._appsSeparator) {
 
 ---
 
-### 17. SUBPROBLEM-17: Favorite Icon Textures Destroyed by `setIconSize()` Recreation Attempt
-- **Log Evidence:** Screenshot showing top button `_appGridBtn` + stolen tray icons, with 11 favorite icons completely missing from view below it.
-- **Mechanism:** `setIconSize(newSize)` called `this.icon.destroy()` and attempted to recreate textures via `this.app.create_icon_texture(size)`. In GNOME Shell GJS, `create_icon_texture()` returns `null` when invoked after initial startup for user-installed custom `.desktop` entries (like `antigravity.desktop`, `hiddify-root.desktop`, `antigravity-ide.desktop`). This destroyed the inner `this.icon` actor on every favorite button without replacing it, leaving all 11 favorite icons invisible with 0 height.
-- **Resolution:** Replaced `this.icon.destroy()` and `create_icon_texture()` in `setIconSize(size)` with direct, safe actor size scaling (`this.icon.set_size(size, size)` and `this.icon.icon_size = size`).
+### 18. SUBPROBLEM-18: Unaccounted 364px Vertical Height from Stolen Tray Icons in Responsive Layout Engine
+- **Log Evidence:** Log `Stole 13 indicator icons from top panel` with 13 tray icons taking 364px vertical height, pushing all 11 favorite icons below `_appGridBtn` completely out of view.
+- **Mechanism:** When 13 tray icons were stolen into `_trayBox`, `_trayBox` height expanded to 364px. `_updatePositions()` previously assumed a static 40px height for `_trayBox`, calculating a large 48px icon size (`calcSize = 48px`). The 324px calculation error caused total container height to exceed monitor height (1222px > 1056px), forcing Clutter to clip `_appsBox` and push all 11 favorite icons below `_appGridBtn` out of view.
+- **Resolution:** Dynamically measure actual `_trayBox.get_preferred_height()` in `_updatePositions()` to guarantee exact responsive icon scaling down to fit all favorite icons regardless of how many tray icons exist.
