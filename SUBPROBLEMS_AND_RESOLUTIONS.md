@@ -1,6 +1,6 @@
 # 📑 RightDock Subproblems & Technical Resolutions Index
 
-This document tracks all fine-grained sub-problems, empirical log findings, and exact code resolutions across `right-dock@pasynkov`.
+This document tracks all fine-grained sub-problems, empirical log findings, and exact code resolutions across `right-dock`.
 
 ---
 
@@ -43,7 +43,7 @@ This document tracks all fine-grained sub-problems, empirical log findings, and 
 ---
 
 ### 2. SUBPROBLEM-02: Stale Array Index Mutation in `_syncApps()`
-- **Log Evidence:** Logs showing `Repositioning icon for pasynkov-connect.desktop from index 15 to 13` / `window:168 from index 13 to 14`.
+- **Log Evidence:** Logs showing `Repositioning icon for desktop-connect.desktop from index 15 to 13` / `window:168 from index 13 to 14`.
 - **Mechanism:** `currentChildren = this._appsBox.get_children()` was cached once before the loop. Calling `set_child_at_index()` mutated the container's live child list, causing subsequent loop iterations to evaluate against stale indices.
 - **Resolution:** Replaced static array snapshot with live `this._appsBox.get_child_at_index(expectedIndex)` check on every iteration.
 

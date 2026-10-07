@@ -4,7 +4,7 @@
 
 ![Desktop Tint Showcase](icons/showcase.png)
 
-**UUID:** `pasynkov-tint@fedor-pasynkov.ru`  
+**UUID:** `desktop-tint@pefbrute.github.io`  
 **Compatibility:** GNOME Shell 42 – 46+ (Ubuntu 22.04 / 24.04+, Wayland & X11)  
 **License:** MIT  
 
@@ -37,7 +37,7 @@ Desktop Tint avoids the common `Failed to create offscreen effect framebuffer` b
 
 1. **Single-Pass GLSL Shader (`Shell.GLSLEffect`):** Combines desaturation, contrast/brightness, and RGB tinting into one unified shader pass, cutting GPU offscreen buffer allocations by 50%.
 2. **Per-Actor Mapping:** Attaches shader instances to individual `MetaWindowActor` elements, `Main.panel`, `_backgroundGroup`, `_overview`, and tracked chrome actors (`right-dock`). Each GPU texture is bounded by actor size, preventing allocation failures on Wayland surface changes.
-3. **GLSL Uniform Preprocessor Guard:** Uses `#ifndef PASYNKOV_TINT_UNIFORMS` to allow dozens of concurrent shader instances without shader link errors.
+3. **GLSL Uniform Preprocessor Guard:** Uses `#ifndef DESKTOP_TINT_UNIFORMS` to allow dozens of concurrent shader instances without shader link errors.
 
 For full technical write-ups and bug resolution history, see:
 - [`BUGS_AND_FIXES.md`](./BUGS_AND_FIXES.md) — Comprehensive bug journal & solutions
@@ -78,17 +78,17 @@ curl -fsSL https://raw.githubusercontent.com/pefbrute/desktop-tint/main/install.
 
 - **Enable Extension:**
   ```bash
-  gnome-extensions enable pasynkov-tint@fedor-pasynkov.ru
+  gnome-extensions enable desktop-tint@pefbrute.github.io
   ```
 
 - **Disable Extension:**
   ```bash
-  gnome-extensions disable pasynkov-tint@fedor-pasynkov.ru
+  gnome-extensions disable desktop-tint@pefbrute.github.io
   ```
 
 - **Open Preferences Window:**
   ```bash
-  gnome-extensions prefs pasynkov-tint@fedor-pasynkov.ru
+  gnome-extensions prefs desktop-tint@pefbrute.github.io
   ```
 
 - **View Live GNOME Shell Journal:**

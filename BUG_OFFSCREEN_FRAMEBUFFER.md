@@ -35,7 +35,7 @@ Because `Clutter.DesaturateEffect` inherits from `Clutter.OffscreenEffect`, GNOM
 
 ## 3. The Solution: Single-Pass Per-Actor GLSL Engine
 
-**Pasynkov Tint** eliminates full-screen offscreen framebuffer allocations entirely by attaching lightweight shader instances directly to individual actors:
+**Desktop Tint** eliminates full-screen offscreen framebuffer allocations entirely by attaching lightweight shader instances directly to individual actors:
 
 1. Every application window (`MetaWindowActor`)
 2. Top Bar Panel (`Main.panel`)

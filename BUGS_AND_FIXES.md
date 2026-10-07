@@ -1,4 +1,4 @@
-# Pasynkov Tint — Known Issues & Fixes Log
+# Desktop Tint — Known Issues & Fixes Log
 
 Chronological technical log of issues encountered during development, root cause analysis, and implemented solutions.
 
@@ -131,7 +131,7 @@ Cogl fragment shader compilation error: u_intensity redeclared
 Cogl concatenates fragment shader declarations when multiple shader effects exist in the pipeline.
 
 **Solution:**  
-Wrapped uniform declarations in `#ifndef PASYNKOV_TINT_UNIFORMS` preprocessor guards.
+Wrapped uniform declarations in `#ifndef DESKTOP_TINT_UNIFORMS` preprocessor guards.
 
 ---
 

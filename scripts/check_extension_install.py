@@ -8,8 +8,8 @@ def run_check():
     print("EXTENSION INSTALLATION & SYMLINK DIAGNOSTIC")
     print("==========================================================")
 
-    proj_dir = "/home/fedor/projects/Ubuntu-Panel-Pasynkov/right-dock@pasynkov"
-    loaded_dir = "/home/fedor/.local/share/gnome-shell/extensions/right-dock@pasynkov"
+    proj_dir = "/home/fedor/projects/Ubuntu-Panel/right-dock"
+    loaded_dir = "/home/fedor/.local/share/gnome-shell/extensions/right-dock"
 
     print(f"1. Checking Paths:")
     print(f"   Project Dir: {proj_dir}")

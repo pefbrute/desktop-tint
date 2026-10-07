@@ -10,7 +10,7 @@ def inspect_live_scene_graph():
     js_code = """
     (function() {
         try {
-            let dock = Main.extensionManager.lookup('right-dock@pasynkov')?.stateObj;
+            let dock = Main.extensionManager.lookup('right-dock')?.stateObj;
             if (!dock) return JSON.stringify({ error: 'RightDock extension stateObj not found' });
 
             let root = dock._dockContainer;

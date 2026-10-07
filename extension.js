@@ -1,5 +1,5 @@
 /**
- * Pasynkov Tint - Main Extension Entrypoint
+ * Desktop Tint - Main Extension Entrypoint
  * Manages extension lifecycle (enable, disable), settings listeners, and component connections.
  */
 
@@ -8,9 +8,9 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 const { EffectManager } = Me.imports.lib.effectManager;
-const { PasynkovTintIndicator } = Me.imports.lib.indicator;
+const { DesktopTintIndicator } = Me.imports.lib.indicator;
 
-class PasynkovTintExtension {
+class DesktopTintExtension {
     constructor(uuid) {
         this._uuid = uuid;
     }
@@ -22,8 +22,8 @@ class PasynkovTintExtension {
         this._settingsSignals = [];
 
         // 1. Create Top Bar Panel Indicator
-        this._indicator = new PasynkovTintIndicator(this);
-        Main.panel.addToStatusArea('pasynkov-tint', this._indicator);
+        this._indicator = new DesktopTintIndicator(this);
+        Main.panel.addToStatusArea('desktop-tint', this._indicator);
 
         // 2. Connect Settings Changed Listeners
         this._bindSettings();
@@ -96,7 +96,7 @@ class PasynkovTintExtension {
 }
 
 function init(meta) {
-    const ext = new PasynkovTintExtension(meta.uuid);
+    const ext = new DesktopTintExtension(meta.uuid);
     ext.path = meta.path;
     ext.dir = meta.dir;
     return ext;

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 def inspect_activate():
-    target_file = "/home/fedor/projects/Ubuntu-Panel-Pasynkov/right-dock@pasynkov/extension.js"
+    target_file = "/home/fedor/projects/Ubuntu-Panel/right-dock/extension.js"
     with open(target_file, "r") as f:
         lines = f.readlines()
 

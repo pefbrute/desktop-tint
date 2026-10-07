@@ -1,20 +1,20 @@
-/* Pasynkov Tint – Panel & Menu Custom Styling */
+/* Desktop Tint – Panel & Menu Custom Styling */
 
 /* ── Panel Icon ─────────────────────────────────────────────────── */
-.pasynkov-tint-icon {
+.desktop-tint-icon {
     icon-size: 16px;
 }
 
-.pasynkov-tint-icon-enabled {
+.desktop-tint-icon-enabled {
     color: #78aeed;          /* soft blue tint when active */
 }
 
-.pasynkov-tint-icon-disabled {
+.desktop-tint-icon-disabled {
     color: #eeeeec;
     opacity: 0.7;
 }
 
-.pasynkov-tint-indicator-active {
+.desktop-tint-indicator-active {
     /* subtle highlight behind the panel button when active */
 }
 
@@ -29,7 +29,7 @@
 }
 
 /* ── Intensity Quick Buttons (Min / Max) ─────────────────────────── */
-.pasynkov-quick-btn {
+.desktop-quick-btn {
     border-radius:    4px;
     background-color: rgba(255,255,255,0.08);
     color:            #dddddd;
@@ -39,11 +39,11 @@
     border:           1px solid rgba(255,255,255,0.12);
 }
 
-.pasynkov-quick-btn:hover {
+.desktop-quick-btn:hover {
     background-color: rgba(255,255,255,0.18);
     color:            #ffffff;
 }
 
-.pasynkov-quick-btn:active {
+.desktop-quick-btn:active {
     background-color: rgba(120,174,237,0.35);
 }

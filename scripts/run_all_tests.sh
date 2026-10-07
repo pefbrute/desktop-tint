@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Master Test Suite & Verification Runner for Pasynkov Tint & RightDock
+# Master Test Suite & Verification Runner for Desktop Tint & RightDock
 
 set -e
 
@@ -7,8 +7,8 @@ echo "=========================================================="
 echo "      RUNNING MASTER TEST SUITE FOR RIGHT DOCK EXTENSION   "
 echo "=========================================================="
 
-EXTENSION_DIR="/home/fedor/projects/Ubuntu-Panel-Pasynkov/right-dock@pasynkov"
-TINT_DIR="/home/fedor/projects/Pasynkov Tint"
+EXTENSION_DIR="/home/fedor/projects/Ubuntu-Panel/right-dock"
+TINT_DIR="/home/fedor/projects/Desktop Tint"
 
 # 1. JS Syntax Check
 echo "[1/4] Checking JS syntax with Node..."

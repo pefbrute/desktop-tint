@@ -83,7 +83,7 @@ def run_health_audit():
     import json
     import os
     json_paths = [
-        "/home/fedor/projects/Pasynkov Tint/scratch/agent_last_audit.json",
+        "/home/fedor/projects/Desktop Tint/scratch/agent_last_audit.json",
         "/home/fedor/.gemini/antigravity/brain/cb829770-8b9a-4ddf-b1d4-40a1c1286419/scratch/agent_last_audit.json"
     ]
     for p in json_paths:

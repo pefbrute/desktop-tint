@@ -12,7 +12,7 @@ def diagnose_extension_state():
     res2 = subprocess.run(["gsettings", "get", "org.gnome.shell", "disabled-extensions"], capture_output=True, text=True)
     print("Disabled Extensions GSettings:", res2.stdout.strip())
 
-    res3 = subprocess.run(["gnome-extensions", "info", "right-dock@pasynkov"], capture_output=True, text=True)
+    res3 = subprocess.run(["gnome-extensions", "info", "right-dock"], capture_output=True, text=True)
     print("\nExtension Info:\n", res3.stdout.strip())
 
     res4 = subprocess.run(["journalctl", "-n", "40", "--no-pager", "/usr/bin/gnome-shell"], capture_output=True, text=True)

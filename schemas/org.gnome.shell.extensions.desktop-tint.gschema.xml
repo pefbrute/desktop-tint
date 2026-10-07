@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.shell.extensions.pasynkov-tint" path="/org/gnome/shell/extensions/pasynkov-tint/">
+  <schema id="org.gnome.shell.extensions.desktop-tint" path="/org/gnome/shell/extensions/desktop-tint/">
     <key name="effect-enabled" type="b">
       <default>false</default>
       <summary>Effect Enabled</summary>

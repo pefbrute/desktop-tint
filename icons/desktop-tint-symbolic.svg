@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <g id="pasynkov-tint-symbolic" fill="#474747">
+    <g id="desktop-tint-symbolic" fill="#474747">
         <!-- Outer lens ring -->
         <path d="M 8 1 C 4.134 1 1 4.134 1 8 C 1 11.866 4.134 15 8 15 C 11.866 15 15 11.866 15 8 C 15 4.134 11.866 1 8 1 Z M 8 2.5 C 11.038 2.5 13.5 4.962 13.5 8 C 13.5 11.038 11.038 13.5 8 13.5 C 4.962 13.5 2.5 11.038 2.5 8 C 2.5 4.962 4.962 2.5 8 2.5 Z" />
         <!-- Filter tint aperture diagonal stripes / aperture core -->

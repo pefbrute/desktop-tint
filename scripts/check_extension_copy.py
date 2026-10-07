@@ -3,8 +3,8 @@ import os
 import subprocess
 
 def check_copy():
-    target = "/home/fedor/.local/share/gnome-shell/extensions/right-dock@pasynkov"
-    source = "/home/fedor/projects/Ubuntu-Panel-Pasynkov/right-dock@pasynkov"
+    target = "/home/fedor/.local/share/gnome-shell/extensions/right-dock"
+    source = "/home/fedor/projects/Ubuntu-Panel/right-dock"
 
     print(f"Target path: {target}")
     print(f"Is symlink: {os.path.islink(target)}")

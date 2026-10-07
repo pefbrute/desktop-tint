@@ -13,7 +13,7 @@ def inspect_recent_failures():
     res = subprocess.run(cmd, capture_output=True, text=True)
     logs = res.stdout.splitlines()
 
-    dock_logs = [l for l in logs if "RightDock" in l or "pasynkov" in l or "DockAppIcon" in l]
+    dock_logs = [l for l in logs if "RightDock" in l or "desktop" in l or "DockAppIcon" in l]
 
     print(f"Total gnome-shell log lines in last 30 min: {len(logs)}")
     print(f"Total dock-related log lines: {len(dock_logs)}\n")

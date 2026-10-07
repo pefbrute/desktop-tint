@@ -15,7 +15,7 @@ def diagnose_visibility_and_autohide():
     res3 = subprocess.run(["gsettings", "get", "org.gnome.shell.extensions.right-dock", "intellihide"], capture_output=True, text=True)
     print("GSettings intellihide:", res3.stdout.strip())
 
-    res4 = subprocess.run(["python3", "/home/fedor/projects/Pasynkov Tint/scripts/inspect_journalctl.py", "40"], capture_output=True, text=True)
+    res4 = subprocess.run(["python3", "/home/fedor/projects/Desktop Tint/scripts/inspect_journalctl.py", "40"], capture_output=True, text=True)
     print("\nRecent Journalctl Logs:\n", res4.stdout.strip())
 
 if __name__ == "__main__":

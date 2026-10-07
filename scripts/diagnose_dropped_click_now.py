@@ -10,7 +10,7 @@ def diagnose_dropped_now():
     res = subprocess.run(cmd, capture_output=True, text=True)
     logs = res.stdout.splitlines()
 
-    dock_logs = [l for l in logs if "RightDock" in l or "pasynkov" in l or "DockAppIcon" in l]
+    dock_logs = [l for l in logs if "RightDock" in l or "desktop" in l or "DockAppIcon" in l]
 
     print(f"Total dock log lines in last 2 minutes: {len(dock_logs)}\n")
     print("=== CHRONOLOGICAL LOGS OF THE LAST 2 MINUTES ===")

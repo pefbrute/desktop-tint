@@ -1,5 +1,5 @@
 /**
- * Pasynkov Tint – Preferences Window
+ * Desktop Tint – Preferences Window
  * GTK4 / Libadwaita settings dialog for GNOME Shell 45+.
  *
  * Note: In GNOME 45+, initTranslations() is called automatically by the shell
@@ -192,8 +192,8 @@ function fillPreferencesWindow(window) {
     aboutPage.add(aboutGroup);
 
     [
-        ['Pasynkov Tint',  _('Version 0.1.0 – Desktop Color Filters for GNOME Shell')],
-        [_('Author'),      'Fedor Pasynkov'],
+        ['Desktop Tint',  _('Version 0.1.0 – Desktop Color Filters for GNOME Shell')],
+        [_('Author'),      'pefbrute'],
         [_('License'),     'MIT License'],
         [_('Inspired by'), _('Tint All extension by Amaro Vita')],
     ].forEach(([title, subtitle]) => {

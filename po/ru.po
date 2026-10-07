@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: pasynkov-tint 0.1.0\n"
+"Project-Id-Version: desktop-tint 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-28 22:00+0300\n"
 "PO-Revision-Date: 2026-07-28 22:00+0300\n"
-"Last-Translator: Fedor Pasynkov\n"
+"Last-Translator: pefbrute\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -83,8 +83,8 @@ msgstr "Отображать экранное уведомление при пр
 msgid "Built-in Color Filters"
 msgstr "Встроенные фильтры"
 
-msgid "Overview of default visual filters available in Pasynkov Tint"
-msgstr "Обзор встроенных цветовых фильтров Pasynkov Tint"
+msgid "Overview of default visual filters available in Desktop Tint"
+msgstr "Обзор встроенных цветовых фильтров Desktop Tint"
 
 msgid "Warm amber-yellow tint reducing harsh blue light"
 msgstr "Тёплый янтарно-жёлтый оттенок для снижения синего света"

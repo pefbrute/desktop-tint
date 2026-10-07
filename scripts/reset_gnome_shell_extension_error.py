@@ -7,11 +7,11 @@ def reset_extension_error():
     print("==========================================================")
 
     eval_script = '''
-    let ext = Main.extensionManager.lookup("right-dock@pasynkov");
+    let ext = Main.extensionManager.lookup("right-dock");
     if (ext) {
         ext.state = 0;
         ext.error = "";
-        Main.extensionManager.enableExtension("right-dock@pasynkov");
+        Main.extensionManager.enableExtension("right-dock");
     }
     '''
 
@@ -19,7 +19,7 @@ def reset_extension_error():
     res = subprocess.run(cmd, capture_output=True, text=True)
     print("DBus Eval output:", res.stdout.strip())
 
-    res_info = subprocess.run(["gnome-extensions", "info", "right-dock@pasynkov"], capture_output=True, text=True)
+    res_info = subprocess.run(["gnome-extensions", "info", "right-dock"], capture_output=True, text=True)
     print("\nUpdated Extension Info State:\n", res_info.stdout.strip())
     print("==========================================================")
 

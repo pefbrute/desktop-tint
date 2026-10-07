@@ -1,19 +1,19 @@
-# Technical Specification: Pasynkov Tint
+# Technical Specification: Desktop Tint
 
 > Modern GNOME Shell extension for applying real-time color filters and desaturation overlays across the entire desktop interface.
 
 **Specification Version:** 1.0  
 **Initial Release:** 0.1.0 MVP  
-**Project Name:** Pasynkov Tint  
+**Project Name:** Desktop Tint  
 **Project Type:** GNOME Shell Extension  
 **Target Platform:** Ubuntu 22.04/24.04 LTS, GNOME Shell 42–46+, Wayland & X11  
-**UUID:** `pasynkov-tint@fedor-pasynkov.ru`
+**UUID:** `desktop-tint@pefbrute.github.io`
 
 ---
 
 ## 1. Project Concept
 
-Pasynkov Tint is a modern, zero-overhead replacement for the classic Tint All extension in GNOME Shell.
+Desktop Tint is a modern, zero-overhead replacement for the classic Tint All extension in GNOME Shell.
 
 Users can dynamically transform the desktop color profile: Amber (warm night light), Green (vintage CRT terminal), Cyan (cool focus), Sepia (classic warm tone), or Grayscale (monochrome). Intensity can be adjusted on the fly using the mouse wheel over the top bar icon or via the intensity slider.
 
@@ -28,7 +28,7 @@ Key Pillars:
 
 ## 2. Core Requirements
 
-1. Adds Pasynkov Tint indicator to top bar panel.
+1. Adds Desktop Tint indicator to top bar panel.
 2. Toggle active color filter effect.
 3. Switch built-in presets (Amber, Green, Cyan, Sepia, Grayscale).
 4. Real-time intensity adjustments (5% – 100%).

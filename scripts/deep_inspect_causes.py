@@ -13,7 +13,7 @@ def run_deep_inspection():
     res = subprocess.run(cmd, capture_output=True, text=True)
     lines = res.stdout.splitlines()
 
-    dock_lines = [l for l in lines if "RightDock" in l or "pasynkov" in l]
+    dock_lines = [l for l in lines if "RightDock" in l or "desktop" in l]
 
     print(f"\n[1] LOG VOLUME: Captured {len(dock_lines)} dock log entries out of {len(lines)} total lines.")
 

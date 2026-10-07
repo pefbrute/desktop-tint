@@ -1,5 +1,5 @@
 {
-  "uuid": "pasynkov-tint@fedor-pasynkov.ru",
+  "uuid": "desktop-tint@pefbrute.github.io",
   "name": "Desktop Tint",
   "description": "Apply adjustable color filters to the entire GNOME desktop interface.",
   "shell-version": [
@@ -11,7 +11,7 @@
     "46"
   ],
   "version": 1,
-  "settings-schema": "org.gnome.shell.extensions.pasynkov-tint",
-  "gettext-domain": "pasynkov-tint",
+  "settings-schema": "org.gnome.shell.extensions.desktop-tint",
+  "gettext-domain": "desktop-tint",
   "url": "https://github.com/pefbrute/desktop-tint"
 }

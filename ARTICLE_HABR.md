@@ -14,7 +14,7 @@ gnome-shell: Failed to create offscreen effect framebuffer:
              Failed to create texture 2d due to size/format constraints
 ```
 
-Многие годы на форумах писали, что это «неисправимый баг Mutter/Wayland». В этой статье я подробно разберу **техническую причину**, почему падали классические расширения, и как устроен **[Pasynkov Tint](https://github.com/pefbrute/Pasynkov-Tint)** — открытое расширение для GNOME на GLSL-шейдерах, работающее без единого сбоя.
+Многие годы на форумах писали, что это «неисправимый баг Mutter/Wayland». В этой статье я подробно разберу **техническую причину**, почему падали классические расширения, и как устроен **[Desktop Tint](https://github.com/pefbrute/desktop-tint)** — открытое расширение для GNOME на GLSL-шейдерах, работающее без единого сбоя.
 
 ---
 
@@ -55,10 +55,10 @@ Telegram Desktop написан на **Qt 6 / 5.15**. При переходе п
 
 ## 💡 Решение: Поакторный однопроходный GLSL-движок
 
-В **Pasynkov Tint** мы полностью отказались от эффекта на весь `uiGroup` и перешли на поакторную архитектуру (per-actor design):
+В **Desktop Tint** мы полностью отказались от эффекта на весь `uiGroup` и перешли на поакторную архитектуру (per-actor design):
 
 ```text
-АРХИТЕКТУРА PASYNKOV TINT (СТАБИЛЬНО):
+АРХИТЕКТУРА DESKTOP TINT (СТАБИЛЬНО):
 
 ┌─────────────────────────────────────────────────────────────┐
 │ Отдельные элементы интерфейса                               │
@@ -82,8 +82,8 @@ Telegram Desktop написан на **Qt 6 / 5.15**. При переходе п
 Вместо каскада нескольких эффектов мы написали единый фрагментный GLSL-шейдер, выполняющий обесцвечивание по стандарту ITU-R BT.709 и смешивание цветов за **один проход GPU**:
 
 ```glsl
-#ifndef PASYNKOV_TINT_UNIFORMS
-#define PASYNKOV_TINT_UNIFORMS
+#ifndef DESKTOP_TINT_UNIFORMS
+#define DESKTOP_TINT_UNIFORMS
 uniform float u_intensity;
 uniform float u_desat;
 uniform vec3  u_tint;
@@ -100,7 +100,7 @@ cogl_color_out.rgb = mix(desatd, tinted, u_tint_mix * u_intensity);
 ```
 
 > 💡 **Нюанс с `#ifndef`:**  
-> Объявление `uniform` обязательно оборачивается в `#ifndef PASYNKOV_TINT_UNIFORMS`. Без этого линкер Cogl при создании нескольких экземпляров шейдера выдаёт ошибку `u_intensity redeclared`, и окна становятся прозрачными.
+> Объявление `uniform` обязательно оборачивается в `#ifndef DESKTOP_TINT_UNIFORMS`. Без этого линкер Cogl при создании нескольких экземпляров шейдера выдаёт ошибку `u_intensity redeclared`, и окна становятся прозрачными.
 
 ---
 
@@ -162,7 +162,7 @@ class LightweightDesatEffect extends Shell.GLSLEffect {
 
 ---
 
-## ✨ Возможности Pasynkov Tint
+## ✨ Возможности Desktop Tint
 
 - 🎨 **6 Пресетов:** Выключен, Amber (тёплый ночной), Green (ретро CRT), Cyan, Sepia, Grayscale (полный Ч/Б).
 - 🎛️ **Управление колесом мыши:** Наведите курсор на иконку в панели и покрутите колесико — интенсивность плавно изменится от 5% до 100%.
@@ -177,10 +177,10 @@ class LightweightDesatEffect extends Shell.GLSLEffect {
 Установить расширение можно одной командой в терминале:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/pefbrute/Pasynkov-Tint/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/pefbrute/desktop-tint/main/install.sh | bash
 ```
 
 Репозиторий на GitHub:  
-👉 **[pefbrute/Pasynkov-Tint (GitHub)](https://github.com/pefbrute/Pasynkov-Tint)**
+👉 **[pefbrute/desktop-tint (GitHub)](https://github.com/pefbrute/desktop-tint)**
 
 *Буду рад звёздам на GitHub и фидбеку по работе на разных видеокартах и дистрибутивах!*

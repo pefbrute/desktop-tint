@@ -1,14 +1,14 @@
 ---
-title: Looking for a Working GNOME Grayscale & Eye Strain Filter? How I Fixed "Tint All" & Built Pasynkov Tint
+title: Looking for a Working GNOME Grayscale & Eye Strain Filter? How I Fixed "Tint All" & Built Desktop Tint
 published: true
-description: Looking for a working GNOME Shell grayscale filter, eye strain reducer, or a reliable alternative to Tint All & GNOME Bedtime Mode? Discover how Pasynkov Tint uses a per-actor GLSL engine to eliminate Telegram crashes and framebuffer drops on Wayland.
+description: Looking for a working GNOME Shell grayscale filter, eye strain reducer, or a reliable alternative to Tint All & GNOME Bedtime Mode? Discover how Desktop Tint uses a per-actor GLSL engine to eliminate Telegram crashes and framebuffer drops on Wayland.
 tags: gnome, linux, accessibility, javascript
-cover_image: https://raw.githubusercontent.com/pefbrute/Pasynkov-Tint/main/icons/telegram_showcase.png
+cover_image: https://raw.githubusercontent.com/pefbrute/desktop-tint/main/icons/telegram_showcase.png
 ---
 
-# Looking for a Working GNOME Grayscale & Eye Strain Filter? How I Fixed "Tint All" & Built Pasynkov Tint
+# Looking for a Working GNOME Grayscale & Eye Strain Filter? How I Fixed "Tint All" & Built Desktop Tint
 
-![Pasynkov Tint Telegram Showcase](https://raw.githubusercontent.com/pefbrute/Pasynkov-Tint/main/icons/telegram_showcase.png)
+![Desktop Tint Telegram Showcase](https://raw.githubusercontent.com/pefbrute/desktop-tint/main/icons/telegram_showcase.png)
 
 If you spend long hours in front of a monitor, using a **grayscale (monochrome) filter** or a **warm color tint (amber/sepia)** is one of the most effective ways to reduce eye strain, minimize digital fatigue, and cut down on dopamine-driven screen distractions.
 
@@ -26,7 +26,7 @@ gnome-shell: Failed to create offscreen effect framebuffer:
 
 For years, users searching for a **reliable Tint All alternative** or a **permanent GNOME Bedtime Mode fix** were told this was an unfixable Mutter/Wayland bug.
 
-In this article, I will explain the **technical root cause of why traditional GNOME Shell color filters fail**, and how I built **[Pasynkov Tint](https://github.com/pefbrute/Pasynkov-Tint)** — a high-performance, per-actor **GNOME color tint & grayscale extension** engineered to eliminate Wayland framebuffer drops.
+In this article, I will explain the **technical root cause of why traditional GNOME Shell color filters fail**, and how I built **[Desktop Tint](https://github.com/pefbrute/desktop-tint)** — a high-performance, per-actor **GNOME color tint & grayscale extension** engineered to eliminate Wayland framebuffer drops.
 
 ---
 
@@ -36,9 +36,9 @@ In this article, I will explain the **technical root cause of why traditional GN
 - [🔍 The Root Cause Post-Mortem](#-the-root-cause-post-mortem)
 - [💡 The Solution: Per-Actor Single-Pass GLSL Engine](#-the-solution-per-actor-single-pass-glsl-engine)
 - [🛠️ Copy-Paste Solution for Developers](#%EF%B8%8F-copy-paste-solution-use-single-pass-desaturation-in-your-extension)
-- [✨ Features of Pasynkov Tint](#-features-of-pasynkov-tint)
+- [✨ Features of Desktop Tint](#-features-of-desktop-tint)
 - [❓ Frequently Asked Questions (FAQ)](#-frequently-asked-questions-faq)
-- [🚀 Quick 1-Line Installation](#-how-to-install-pasynkov-tint)
+- [🚀 Quick 1-Line Installation](#-how-to-install-desktop-tint)
 
 ---
 
@@ -46,7 +46,7 @@ In this article, I will explain the **technical root cause of why traditional GN
 
 To understand why extensions like *Tint All* and *GNOME Bedtime Mode* drop their filters on Wayland, we need to look under the hood of GNOME Shell's rendering pipeline.
 
-| Feature / Metric | Traditional Extensions (Tint All, Bedtime Mode) | Pasynkov Tint |
+| Feature / Metric | Traditional Extensions (Tint All, Bedtime Mode) | Desktop Tint |
 | :--- | :---: | :---: |
 | **Grayscale / Monochrome Filter** | ✅ Yes | ✅ Yes |
 | **Custom Color Tints (Amber, Sepia, Cyan, Green)** | ⚠️ Limited | ✅ Full (with dynamic presets) |
@@ -102,10 +102,10 @@ The effect remains attached according to `actor.get_effect()`, but your screen r
 
 ## 💡 The Solution: Per-Actor Single-Pass GLSL Engine
 
-To build a truly reliable **GNOME eye strain filter**, we completely redesigned the shader architecture in **Pasynkov Tint**.
+To build a truly reliable **GNOME eye strain filter**, we completely redesigned the shader architecture in **Desktop Tint**.
 
 ```text
-PASYNKOV TINT ARCHITECTURE (100% STABLE):
+DESKTOP TINT ARCHITECTURE (100% STABLE):
 
 ┌─────────────────────────────────────────────────────────────┐
 │ Individual Screen Components                                │
@@ -129,8 +129,8 @@ PASYNKOV TINT ARCHITECTURE (100% STABLE):
 Instead of stacking two separate offscreen effects, we wrote a single custom GLSL fragment shader that performs desaturation, brightness/contrast scaling, and RGB tinting in **a single GPU pass**:
 
 ```glsl
-#ifndef PASYNKOV_TINT_UNIFORMS
-#define PASYNKOV_TINT_UNIFORMS
+#ifndef DESKTOP_TINT_UNIFORMS
+#define DESKTOP_TINT_UNIFORMS
 uniform float u_intensity;
 uniform float u_desat;
 uniform vec3  u_tint;
@@ -147,7 +147,7 @@ cogl_color_out.rgb = mix(desatd, tinted, u_tint_mix * u_intensity);
 ```
 
 > 💡 **GLSL Preprocessor Guard Note:**  
-> We wrapped uniform declarations in `#ifndef PASYNKOV_TINT_UNIFORMS`. Without this guard, Cogl's snippet linker fails with `error: u_intensity redeclared` when multiple shader instances are created, causing window actors to turn completely invisible!
+> We wrapped uniform declarations in `#ifndef DESKTOP_TINT_UNIFORMS`. Without this guard, Cogl's snippet linker fails with `error: u_intensity redeclared` when multiple shader instances are created, causing window actors to turn completely invisible!
 
 ---
 
@@ -169,9 +169,9 @@ _syncWindowActors() {
     for (const actor of currentActors) {
         if (this._windowEffects.has(actor)) continue;
 
-        const effect = new PasynkovTintEffect();
+        const effect = new DesktopTintEffect();
         effect.setParams(this._intensity, preset.desat, preset.tint, preset.tintMix);
-        actor.add_effect_with_name('pasynkov-tint-unified', effect);
+        actor.add_effect_with_name('desktop-tint-unified', effect);
 
         const destroyId = actor.connect('destroy', () => {
             this._windowEffects.delete(actor);
@@ -229,14 +229,14 @@ class LightweightDesatEffect extends Shell.GLSLEffect {
 
 ---
 
-## ✨ Features of Pasynkov Tint
+## ✨ Features of Desktop Tint
 
-If you want a comfortable, eye-friendly Linux desktop experience, **Pasynkov Tint** includes several productivity features:
+If you want a comfortable, eye-friendly Linux desktop experience, **Desktop Tint** includes several productivity features:
 
 - 🎨 **6 Color Presets:** Off, Amber (warm night reading), Green, Cyan, Sepia, and pure Grayscale (Monochrome).
 - 🎛️ **Mouse Wheel Scrolling:** Hover over the top bar panel icon and scroll your mouse wheel to adjust filter intensity from 5% to 100% in real time.
 - 🖱️ **Instant Click Cycling:** Left-click the panel icon to quickly cycle presets without opening menus.
-- 🖥️ **Desktop OSD Feedback:** Displays real-time pop-up notification feedback (`Pasynkov Tint · Amber · 65%`).
+- 🖥️ **Desktop OSD Feedback:** Displays real-time pop-up notification feedback (`Desktop Tint · Amber · 65%`).
 - ⚠ **Emergency Reset Switch:** Built-in reset button in the popup menu to instantly restore default screen settings if needed.
 - ⚙️ **GTK4 / Libadwaita Preferences:** Full-featured settings window with compatibility across **GNOME 42, 43, 44, 45, and 46+**.
 
@@ -244,8 +244,8 @@ If you want a comfortable, eye-friendly Linux desktop experience, **Pasynkov Tin
 
 ## ❓ Frequently Asked Questions (FAQ)
 
-### Does Pasynkov Tint work with GNOME's built-in Night Light?
-Yes! GNOME Night Light operates at the display server / gamma level, while Pasynkov Tint runs inside Mutter's Clutter scene graph. They complement each other smoothly.
+### Does Desktop Tint work with GNOME's built-in Night Light?
+Yes! GNOME Night Light operates at the display server / gamma level, while Desktop Tint runs inside Mutter's Clutter scene graph. They complement each other smoothly.
 
 ### Does the filter show up in screenshots or screen recordings?
 No. Because effects are applied per-actor in Mutter's scene graph without mutating system gamma ramps, full-resolution screenshots (`PrtScn`) and OBS screen recordings remain in natural full color.
@@ -255,29 +255,29 @@ Yes! Tested and fully supported on Ubuntu 22.04 LTS (GNOME 42) through Ubuntu 24
 
 ---
 
-## 🚀 How to Install Pasynkov Tint
+## 🚀 How to Install Desktop Tint
 
-You can install Pasynkov Tint instantly with a single command in your Linux terminal:
+You can install Desktop Tint instantly with a single command in your Linux terminal:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/pefbrute/Pasynkov-Tint/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/pefbrute/desktop-tint/main/install.sh | bash
 ```
 
 Or manually clone and run the installer script:
 
 ```bash
-git clone https://github.com/pefbrute/Pasynkov-Tint.git
-cd Pasynkov-Tint
+git clone https://github.com/pefbrute/desktop-tint.git
+cd desktop-tint
 ./install.sh
 ```
 
 ---
 
-## 🔗 Try Pasynkov Tint Today
+## 🔗 Try Desktop Tint Today
 
-Check out **Pasynkov Tint** on GitHub:
+Check out **Desktop Tint** on GitHub:
 
-👉 **[Pasynkov Tint Repository on GitHub (pefbrute/Pasynkov-Tint)](https://github.com/pefbrute/Pasynkov-Tint)**
+👉 **[Desktop Tint Repository on GitHub (pefbrute/desktop-tint)](https://github.com/pefbrute/desktop-tint)**
 
 If you found this technical deep dive helpful or use the GLSL snippet in your extension, feel free to star the repo and leave a comment below!
 

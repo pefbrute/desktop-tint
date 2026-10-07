@@ -11,7 +11,7 @@ def reclassify_click_events():
     res = subprocess.run(cmd, capture_output=True, text=True)
     logs = res.stdout.splitlines()
 
-    dock_logs = [l for l in logs if "RightDock" in l or "pasynkov" in l]
+    dock_logs = [l for l in logs if "RightDock" in l or "desktop" in l]
 
     presses = []
     releases = []

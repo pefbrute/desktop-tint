@@ -10,7 +10,7 @@ def diagnose_now():
     res = subprocess.run(cmd, capture_output=True, text=True)
     logs = res.stdout.splitlines()
 
-    dock_logs = [l for l in logs if any(k in l for k in ["RightDock", "pasynkov", "DockAppIcon", "button-press", "clicked", "ACTIVATE"])]
+    dock_logs = [l for l in logs if any(k in l for k in ["RightDock", "desktop", "DockAppIcon", "button-press", "clicked", "ACTIVATE"])]
 
     print(f"Captured {len(dock_logs)} dock-related log lines in the last 2 minutes:\n")
 

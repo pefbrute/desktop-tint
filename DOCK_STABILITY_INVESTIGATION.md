@@ -2,7 +2,7 @@
 
 > **DECISION:** Refactor `DockAppIcon` from scratch on top of GNOME Shell's native `AppDisplay.AppIcon` & `St.Button`.  
 > **GOAL:** Eliminate overlapping custom event handlers, manual pointer grabs, stale child array indexing, and preview hover storms.  
-> **DETAILED SUBPROBLEMS LOG:** See [SUBPROBLEMS_AND_RESOLUTIONS.md](file:///home/fedor/projects/Pasynkov%20Tint/SUBPROBLEMS_AND_RESOLUTIONS.md) for full breakdown.
+> **DETAILED SUBPROBLEMS LOG:** See [SUBPROBLEMS_AND_RESOLUTIONS.md](file:///home/fedor/projects/desktop-tint/SUBPROBLEMS_AND_RESOLUTIONS.md) for full breakdown.
 
 ---
 
@@ -10,7 +10,7 @@
 
 ### 1. ISSUE 12: Preview Popup Hover Storm Interception (Group C2 Click Loss)
 - **Symptom:** Hovering across dock icons rendered clicks completely non-responsive (`button-press` log was 100% missing on the target icon actor).
-- **Empirical Log Evidence:** 7 consecutive `showWindowPreviews` calls occurred within 1 second for 7 separate windows (4ch, Brave, Hiddify, PulseEffects, Pasynkov Tint, Steam).
+- **Empirical Log Evidence:** 7 consecutive `showWindowPreviews` calls occurred within 1 second for 7 separate windows (4ch, Brave, Hiddify, PulseEffects, Desktop Tint, Steam).
 - **Root Cause:** Moving the mouse across icons spawned independent hover timers for each icon, spawning preview popups under/over the cursor. The preview overlay captured the mouse click, blocking `button-press` from reaching `DockAppIcon`.
 - **Fix Applied:**
   - Implemented a single dock-wide `_scheduleWindowPreview` timer with a 350ms delay and an incrementing `_previewToken` guard.
@@ -21,7 +21,7 @@
 
 ### 2. ISSUE 13: Stale Array Index Mutation in `_syncApps()` (Favorite Icons Disappearing)
 - **Symptom:** After several hours of use, favorite application icons disappeared from the dock or got repositioned out of view.
-- **Empirical Log Evidence:** Log entries `Repositioning icon for pasynkov-connect.desktop from index 15 to 13` / `window:168 from index 13 to 14` / `steam.desktop from index 14 to 15`.
+- **Empirical Log Evidence:** Log entries `Repositioning icon for desktop-connect.desktop from index 15 to 13` / `window:168 from index 13 to 14` / `steam.desktop from index 14 to 15`.
 - **Root Cause:** `let currentChildren = this._appsBox.get_children()` was computed ONCE prior to the re-ordering loop. When `set_child_at_index(item, expectedIndex)` was called inside the loop, Clutter dynamically altered the container's child order, causing subsequent loop iterations to compare against a stale `currentChildren` array and place actors into corrupted indices.
 - **Fix Applied:** Replaced stale `currentChildren` snapshot with live `this._appsBox.get_child_at_index(expectedIndex)` check on every iteration:
 ```javascript

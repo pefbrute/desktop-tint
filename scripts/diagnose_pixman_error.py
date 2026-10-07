@@ -12,7 +12,7 @@ def inspect_pixman():
 
     print(f"Total log lines: {len(logs)}\n")
     for l in logs:
-        if any(k in l for k in ["pixman", "Clutter", "texture", "Preview", "RightDock", "Pasynkov"]):
+        if any(k in l for k in ["pixman", "Clutter", "texture", "Preview", "RightDock", "Desktop"]):
             print("  ", l)
 
     print("==========================================================")

@@ -9,7 +9,7 @@ def analyze_logs():
     res = subprocess.run(cmd, capture_output=True, text=True)
     logs = res.stdout.splitlines()
 
-    rightdock_logs = [line for line in logs if "RightDock" in line or "pasynkov" in line]
+    rightdock_logs = [line for line in logs if "RightDock" in line or "desktop" in line]
     print(f"Found {len(rightdock_logs)} RightDock entries in recent 500 journal lines.\n")
 
     events = {

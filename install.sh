@@ -6,7 +6,7 @@
 
 set -e
 
-UUID="pasynkov-tint@fedor-pasynkov.ru"
+UUID="desktop-tint@pefbrute.github.io"
 INSTALL_DIR="$HOME/.local/share/gnome-shell/extensions/$UUID"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -18,7 +18,7 @@ mkdir -p "$INSTALL_DIR"
 # 2. Copy extension files
 echo "📦 Copying files to $INSTALL_DIR..."
 rsync -a --exclude='.git' \
-         --exclude='Pasynkov_Tint_TZ.md' \
+         --exclude='DESKTOP_TINT_TZ.md' \
          --exclude='ARTICLE_DEV_TO.md' \
          --exclude='BUG_OFFSCREEN_FRAMEBUFFER.md' \
          --exclude='BUGS_AND_FIXES.md' \

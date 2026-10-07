@@ -16,7 +16,7 @@ def inspect_panel_anomaly():
     # Filter critical warnings, errors, or anomalies
     anomalies = []
     for l in logs:
-        if any(k in l for k in ["RightDock", "Pasynkov", "error", "Error", "warning", "Warning", "CRITICAL", "allocat", "stole", "intellihide"]):
+        if any(k in l for k in ["RightDock", "Desktop", "error", "Error", "warning", "Warning", "CRITICAL", "allocat", "stole", "intellihide"]):
             anomalies.append(l)
 
     print("=== CHRONOLOGICAL LOGS OF ANOMALIES & EXTENSION EVENTS ===")
