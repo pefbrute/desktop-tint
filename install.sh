@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# Pasynkov Tint - Automatic Installer Script
-# Installs and enables Pasynkov Tint GNOME Shell extension in one command.
+# Desktop Tint - Automatic Installer Script
+# Installs and enables Desktop Tint GNOME Shell extension in one command.
 #
 
 set -e
@@ -10,7 +10,7 @@ UUID="pasynkov-tint@fedor-pasynkov.ru"
 INSTALL_DIR="$HOME/.local/share/gnome-shell/extensions/$UUID"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "🎨 Installing Pasynkov Tint GNOME Extension..."
+echo "🎨 Installing Desktop Tint GNOME Extension..."
 
 # 1. Create extension directory
 mkdir -p "$INSTALL_DIR"
@@ -35,10 +35,10 @@ fi
 if command -v gnome-extensions >/dev/null 2>&1; then
     echo "🚀 Enabling extension..."
     gnome-extensions enable "$UUID" || true
-    echo "✨ Pasynkov Tint successfully installed and enabled!"
+    echo "✨ Desktop Tint successfully installed and enabled!"
 else
     echo "⚠️ gnome-extensions CLI not found. Please enable '$UUID' via Extension Manager."
 fi
 
 echo ""
-echo "🎉 Done! You can now control Pasynkov Tint from your top panel."
+echo "🎉 Done! You can now control Desktop Tint from your top panel."
